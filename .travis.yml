@@ -1,17 +1,16 @@
-language: crystal
-
-crystal:
-  - latest
-
 dist: bionic
 
-before_install:
-  - shards update
-  - shards install
-
-install:
-  - crystal build --error-on-warnings src/invidious.cr
-
-script:
-  - crystal tool format --check
-  - crystal spec
+jobs:
+  include:
+    - stage: build_docker
+      language: minimal
+      services:
+        - docker
+      install:
+        - docker-compose up --build --no-start
+      script:
+        - docker-compose start
+        - HEADERS="$(curl -I -s http://localhost:3000/)"
+        - STATUS="$(echo $HEADERS | head -n1)"
+        - echo "$HEADERS"
+        - if [[ "$STATUS" != *"200 OK"* ]]; then echo "$HEADERS"; exit 1; fi
