@@ -5,12 +5,16 @@ crystal:
 
 dist: bionic
 
+services:
+  - docker
+
 before_install:
   - shards update
   - shards install
 
 install:
   - crystal build --error-on-warnings src/invidious.cr
+  - docker-compose build
 
 script:
   - crystal tool format --check
