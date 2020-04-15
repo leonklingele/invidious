@@ -22,7 +22,7 @@ RUN crystal build ./src/invidious.cr \
     --static --warnings all --error-on-warnings \
 # TODO: Remove next line, see https://github.com/crystal-lang/crystal/issues/7946
     -Dmusl \
-    --link-flags "-lxml2 -llzma"
+    --link-flags "-lxml2 -llzma -lyaml"
 
 FROM alpine:latest
 RUN apk add --no-cache librsvg ttf-opensans
