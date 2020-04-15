@@ -1,6 +1,6 @@
 FROM alpine:edge AS builder
 RUN apk add --no-cache crystal shards libc-dev \
-    yaml libxml2-dev sqlite-dev zlib-dev openssl-dev \
+    yaml-dev yaml libxml2-dev sqlite-dev zlib-dev openssl-dev \
     sqlite-static zlib-static openssl-libs-static
 WORKDIR /invidious
 COPY ./shard.yml ./shard.yml
@@ -20,8 +20,6 @@ COPY ./src/ ./src/
 COPY ./.git/ ./.git/
 RUN crystal build ./src/invidious.cr \
     --static --warnings all --error-on-warnings \
-# TODO: Remove next line, see https://github.com/crystal-lang/crystal/issues/7946
-    -Dmusl \
     --link-flags "-lxml2 -llzma -lyaml"
 
 FROM alpine:latest
